@@ -1,7 +1,5 @@
-# HW2 FTP Client
-> ftp client in python
-
-Owen Brooks
+# python-ftp-client
+> simple socekts based ftp client in python
 
 ## Requirements
 
