@@ -1,4 +1,4 @@
-# python-ftp-client
+# ftp-client
 > simple sockets based ftp client in python
 
 ## Requirements
