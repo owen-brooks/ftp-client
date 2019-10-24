@@ -1,5 +1,4 @@
 """
-CS472 – Homework  # 2
 Owen Brooks
 utils.py
 
