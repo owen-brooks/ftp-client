@@ -3,7 +3,7 @@ CS472 – Homework  # 2
 Owen Brooks
 utils.py
 
-This module provides utility functions
+This module provides helper functions
 """
 import socket
 
@@ -58,3 +58,72 @@ def parse_args(args):
             raise ValueError(f"Not a valid port number | port: {args[2]}")
 
     return host, log_file, port
+
+
+def parse_ftp_response(resp):
+    """parse response from ftp server
+
+    :param resp: full text of response
+    :return: tuple (resp_code, respnse message)
+    """
+    resp_code = resp[:3]
+    msg = resp[4:]
+    return int(resp_code), msg
+
+
+def host_is_ipv4(host):
+    """determine if ip is ipv4
+
+    :param host: ip address
+    :return: True if ipv4
+    """
+    return "." in host
+
+
+def build_port_cmd(host, port):
+    """build cmd string for port cmd
+
+    :param host: ip address
+    :param port: port number
+    :return: cmd string
+    """
+    if not host_is_ipv4(host):
+        print("PORT only compatible with IPV4")
+        raise ValueError
+
+    host = ",".join(host.split("."))  # make host comma delimited
+    p1 = port // 256
+    p2 = port - (p1 * 256)
+    return f"PORT {host},{str(p1)},{str(p2)}"
+
+
+def build_eprt_cmd(host, port):
+    """build cmd string for eprt cmd
+
+    :param host: ip address
+    :param port: port number
+    :return: cmd string
+    """
+    if host_is_ipv4(host):
+        return f"EPRT |1|{host}|{port}|"
+    return f"EPRT |2|{host}|{port}|"
+
+
+def parse_pasv_resp(resp):
+    """parse port number out of pasv response
+
+    :param resp: response from ftp server
+    :return: port number
+    """
+    print(resp)
+    resp = resp.split(",")[-2:]
+    return int(resp[0]) * 256 + int(resp[1].split(")")[0])
+
+
+def parse_epsv_resp(resp):
+    """parse port number out of espv response
+
+    :param resp: response from ftp server
+    :return: port number
+    """
+    return int(resp.split("(|||")[-1].split("|)")[0])

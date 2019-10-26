@@ -3,7 +3,7 @@ CS472 – Homework  # 2
 Owen Brooks
 run.py
 
-This module 
+This module provides command line connection for the ftp_client module
 """
 
 import sys
@@ -15,10 +15,14 @@ from src.ftp_client import Client
 
 host, log_file, port = parse_args(sys.argv[1:])  # exclude filename
 
-logging.basicConfig(filename=log_file,
-                    format='%(asctime)s - %(message)s', level=logging.INFO)
+logging.basicConfig(
+    filename=log_file, format="%(asctime)s - %(message)s", level=logging.INFO
+)
 logger = logging.getLogger()
 
 ftp_client = Client(logger)
-ftp_client.connect(host, port)
-ftp_client.run()
+if ftp_client.connect(host, port):
+    ftp_client.run()
+else:
+    print("Connection to server failed ... exiting")
+
